@@ -6186,6 +6186,7 @@ html[data-raya-learning-rail-scroll-lock="true"] body {
 .raya-main-article table th,
 .raya-main-article table td {
   border: 1px solid var(--raya-color-border);
+  overflow-wrap: normal;
   padding: 0.45rem 0.7rem;
   text-align: left;
   vertical-align: top;
