@@ -1390,3 +1390,19 @@ def test_los_enlaces_externos_abren_en_pestana_nueva(tmp_path):
     assert not _is_external_href("/curso/pagina/")
     assert not _is_external_href("#una-seccion")
     assert not _is_external_href("mailto:alguien@example.org")
+
+
+def test_los_pdf_del_curso_abren_en_pestana_nueva():
+    """Un PDF del curso abre en otra pestana; el resto de lo local no.
+
+    El visor de PDF del navegador ocupa la pestana entera: abierto en la misma,
+    el lector pierde la pagina desde la que lo abrio.
+    """
+    from raya_static.rendering import _opens_in_new_tab
+
+    assert _opens_in_new_tab("../_raya/assets/_source/99_examenes/_local/practica-docker.pdf")
+    assert _opens_in_new_tab("../_assets/deck.PDF#page=2")
+    assert _opens_in_new_tab("https://example.org/paper.pdf")
+    assert not _opens_in_new_tab("../_assets/diagrama.svg")
+    assert not _opens_in_new_tab("/curso/pdf-y-mas/")
+    assert not _opens_in_new_tab("#una-seccion")
