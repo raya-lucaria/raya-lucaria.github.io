@@ -4339,6 +4339,9 @@ html[data-raya-shell-reconciling="true"] .raya-learning-rail {
 }
 .raya-course-map-body {
   display: grid;
+  /* Same Chrome 154 rule as .raya-course-map: an implicit column grows to
+     the navigation's longest label. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: minmax(0, 1fr) 48px;
   min-block-size: 0;
   overflow: clip;
@@ -4400,6 +4403,7 @@ html[data-raya-shell-reconciling="true"] .raya-learning-rail {
 .raya-learning-rail-body {
   display: grid;
   gap: 0;
+  grid-template-columns: minmax(0, 1fr);
 }
 .raya-learning-rail-context-chip {
   display: none;
