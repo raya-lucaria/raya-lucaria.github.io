@@ -83,6 +83,20 @@ def _is_external_href(href: str) -> bool:
     return href.startswith(("http://", "https://"))
 
 
+def _is_local_pdf_href(href: str) -> bool:
+    """Un enlace a un PDF del propio curso (un examen, una presentacion).
+
+    El navegador lo abre con su visor de PDF a pantalla completa; en la misma
+    pestana, eso reemplaza la pagina del curso que lo enlaza.
+    """
+    path = href.split("#", 1)[0].split("?", 1)[0].lower()
+    return not _is_external_href(href) and path.endswith(".pdf")
+
+
+def _opens_in_new_tab(href: str) -> bool:
+    return _is_external_href(href) or _is_local_pdf_href(href)
+
+
 def _is_inspectable_local_image_src(src: str) -> bool:
     lowered = src.lower().split("#", 1)[0].split("?", 1)[0]
     if lowered.startswith(("http://", "https://", "//", "data:", "mailto:", "tel:")):
@@ -370,9 +384,9 @@ class RichMarkdownRenderer:
         if href:
             resolved = self._resolve_href(href)
             tokens[idx].attrSet("href", resolved)
-            if _is_external_href(resolved):
-                # Un enlace que sale del curso abre en otra pestana, para que el
-                # lector no pierda la pagina donde estaba. rel="noopener" es
+            if _opens_in_new_tab(resolved):
+                # Un enlace que sale del curso, o que abre un PDF, va en otra
+                # pestana, para que el lector no pierda la pagina donde estaba. rel="noopener" es
                 # obligatorio con target="_blank": sin el, la pagina destino
                 # recibe una referencia a window.opener y puede navegar la
                 # pestana de origen.
