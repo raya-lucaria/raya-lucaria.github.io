@@ -7897,6 +7897,12 @@ def test_preview_serves_local_course_search_surface(tmp_path: Path) -> None:
                             == "true"
                         )
                         result_card.locator("a").first.focus()
+                        # From here on the test drives the keyboard. Park the
+                        # pointer in a corner: when the context actions open,
+                        # the result list shifts, and a pointer left where the
+                        # hover put it can land on the next card and activate
+                        # it. Seen on CI as "Open page: Numbered Objects".
+                        page.mouse.move(0, 0)
                         assert (
                             result_card.get_attribute("data-raya-search-active")
                             == "true"

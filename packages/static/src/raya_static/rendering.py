@@ -4226,6 +4226,11 @@ html[data-raya-shell-ready="true"] .raya-learning-shell {
 .raya-course-map {
   align-self: start;
   grid-area: course-map;
+  /* The map is a one-column grid. Left implicit, the column is sized from
+     its content, and Chrome 154 counts the header's full course title in
+     that size, so the column grew past the map and pushed the header 2px
+     outside its border. minmax(0, 1fr) pins the column to the map width. */
+  grid-template-columns: minmax(0, 1fr);
   --raya-shell-block-offset: 2rem;
   inline-size: calc(__RAYA_RAIL_EXPANDED_PX__ * 1px);
   max-block-size: calc(100dvh - var(--raya-shell-block-offset, 0px));
