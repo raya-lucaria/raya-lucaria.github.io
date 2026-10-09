@@ -516,8 +516,13 @@ _RAIL_FRAME_STATE = """() => {
 
 
 def _rail_frame_states(page):
-    immediate = page.evaluate(_RAIL_FRAME_STATE)
-    early = page.evaluate(
+    # Sample the first two frames the reader can see. A viewport change is
+    # applied in the browser's next rendering update, which runs resize and
+    # media-query listeners and then requestAnimationFrame callbacks, before
+    # the frame is painted. A sample taken straight after set_viewport_size
+    # can run before that update: on a loaded CI runner it caught the shell
+    # still in its old state, a state no painted frame ever showed.
+    return page.evaluate(
         f"""async () => {{
           const sample = {_RAIL_FRAME_STATE};
           const states = [];
@@ -528,7 +533,6 @@ def _rail_frame_states(page):
           return states;
         }}"""
     )
-    return [immediate, *early]
 
 
 def _assert_atomic_rail_frames(states, expected_pair):
